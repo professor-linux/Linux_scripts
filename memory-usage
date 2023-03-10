@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Get the current memory usage
+mem=$(free | awk '/Mem/{printf("%.2f"), $3/$2*100}')
+
+# Check if memory usage is above threshold (80% in this example)
+if (( $(echo "$mem > 80" | bc -l) )); then
+    echo "Memory usage is high: $mem%"
+else
+    echo "Memory usage is normal: $mem%"
+fi
