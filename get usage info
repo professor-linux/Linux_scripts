@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Get current date and time
+current_date=$(date +"%Y-%m-%d %H:%M:%S")
+
+# Check CPU usage
+cpu_usage=$(top -bn1 | grep "Cpu(s)" | awk '{print $2 + $4}')
+cpu_threshold=80
+if (( $(echo "$cpu_usage > $cpu_threshold" | bc -l) )); then
+    echo "[${current_date}] CPU usage is above threshold: ${cpu_usage}%" >> /var/log/server.log
+fi
+
+# Check RAM usage
+ram_usage=$(free | awk '/Mem/ {print $3/$2 * 100.0}')
+ram_threshold=80
+if (( $(echo "$ram_usage > $ram_threshold" | bc -l) )); then
+    echo "[${current_date}] RAM usage is above threshold: ${ram_usage}%" >> /var/log/server.log
+fi
+
+# Check hard drive usage
+hdd_usage=$(df -h | awk '$NF=="/" {print $5}' | sed 's/%//')
+hdd_threshold=80
+if (( $(echo "$hdd_usage > $hdd_threshold" | bc -l) )); then
+    echo "[${current_date}] Hard drive usage is above threshold: ${hdd_usage}%" >> /var/log/server.log
+fi
