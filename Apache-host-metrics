@@ -1,0 +1,81 @@
+#!/bin/bash
+
+# This script was created by Zayden Rahman
+
+# Install the proper packages
+
+echo "Installing Apache"
+yum install -y httpd > /dev/null
+
+
+# Checking to see if apache install successfully.
+
+if systemctl is-active httpd > /dev/null 2>&1; then
+echo "Apached installed successfully"
+else
+echo "Apached was installation was unsuccessful"
+fi
+
+# Enable and start the Apache service
+
+echo "Enabling apache web server"
+
+systemctl enable --now httpd > /dev/null
+
+check=$(systemctl status httpd | grep -i active | awk '{print $2}')
+
+if [ $check = "active" ];then
+echo -e "Apache is enabled, for persistance. \n Status: $check"
+else
+echo -e "Apache has failed to be enabled: \n Status: $check"
+fi
+
+
+# Get server metrics
+ram_total=$(echo "scale=2; $(free -m | grep Mem | awk '{print $2}') / 1024" | bc)
+ram_used=$(echo "scale=2; $(free -m | grep Mem | awk '{print $3}') / 1024" | bc)
+cpu_usage=$(top -bn1 | grep load | awk '{printf "%.2f", $(NF-2)}')
+
+# Generate HTML output
+html_output=$(cat <<EOF
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Server Metrics</title>
+    <style>
+      table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 5px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Server Metrics</h1>
+    <table>
+      <tr>
+        <th>Metric</th>
+        <th>Value</th>
+      </tr>
+      <tr>
+        <td>RAM Total</td>
+        <td>$ram_total GB</td>
+      </tr>
+      <tr>
+        <td>RAM Used</td>
+        <td>$ram_used GB</td>
+      </tr>
+      <tr>
+        <td>CPU Usage</td>
+        <td>$cpu_usage</td>
+      </tr>
+    </table>
+  </body>
+</html>
+EOF
+)
+
+# Write the HTML output to a file
+echo "$html_output" > /var/www/html/index.html
