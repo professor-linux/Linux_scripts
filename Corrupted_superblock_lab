@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# This script was created by Zayden Rahman
+
+# Create a logical volume name "lv1" with an xfs file system.
+echo "Creating a logical volume named lv1 with xfs."
+
+# Variable to check if lv1 exists
+checklvm=$( sudo lvdisplay | grep lv1 | tail -n 1 | awk '{print $3}')
+
+#checking if lvm exists
+if [ $checklvm = "lv1" ];then
+echo "lv1 already exists skipping..."
+else
+echo "Creating lv1"
+lvcreate -n lv1 -L 1G /dev/vg0 > /dev/null
+echo " Creating a xfs file system "
+mkfs.xfs /dev/vg0/lv1 > /dev/null
+fi
+
+
+echo " Checking if /mnt/lv1 exists "
+
+if [ -d /mnt/lv1 ];then
+echo "/mnt/lv1 exists. Skipping step.."
+else
+echo "/mnt/lv1 does not exists. Creating...directory.."
+mkdir /mnt/lv1
+fi
+
+
+# Mount the logical volume  to /mnt/lv1
+# Checking to see if it is mounted already
+ifmountexists=$(mount  | grep -i /dev/lv1)
+
+if [ $ifmountexists ];then
+echo "Skipping mounting as it is already mounted."
+fi
+
+
+#  Creating a file in the directory in the logical Volume.
+# Checking if file exists
+
+if [ -a /mnt/lv1/test1-xfs.txt ];then
+echo " Skipping file creation as it exists"
+else
+echo "This is a test file!" > /mnt/lv1/test1-xfs.txt
+fi
+
+# Corrupt the XFS Filesystem
+
+echo " Corrupting the XFS Filesystem on /mnt/lv1"
+
+dd if=/dev/zero of=/dev/vg0/lv1 bs=4096 count=1 > /dev/null 2>&1
+
+echo " You can now start the Lab, remember you should be able to mount"
+echo " /dev/vg0/lv1 to /mnt/lv1 and be able to read the test file in the directory."
+
