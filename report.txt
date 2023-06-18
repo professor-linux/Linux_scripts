@@ -1,0 +1,36 @@
+smartctl 7.2 2020-12-30 r5155 [x86_64-linux-5.14.0-162.12.1.el9_1.x86_64] (local build)
+Copyright (C) 2002-20, Bruce Allen, Christian Franke, www.smartmontools.org
+
+=== START OF INFORMATION SECTION ===
+Vendor:               SEAGATE
+Product:              ST9500620SS
+Revision:             AS0B
+Compliance:           SPC-4
+User Capacity:        500,107,862,016 bytes [500 GB]
+Logical block size:   512 bytes
+Rotation Rate:        7200 rpm
+Form Factor:          2.5 inches
+Logical Unit id:      0x5000c50084aca643
+Serial number:        9XF3Z8Q5
+Device type:          disk
+Transport protocol:   SAS (SPL-3)
+Local Time is:        Sun Jun 18 19:16:08 2023 EDT
+SMART support is:     Available - device has SMART capability.
+SMART support is:     Enabled
+Temperature Warning:  Disabled or Not Supported
+Read Cache is:        Enabled
+Writeback Cache is:   Disabled
+
+=== START OF READ SMART DATA SECTION ===
+SMART Health Status: OK
+
+Current Drive Temperature:     25 C
+Drive Trip Temperature:        68 C
+
+Manufactured in week 48 of year 2015
+Specified cycle count over device lifetime:  10000
+Accumulated start-stop cycles:  74
+Specified load-unload count over device lifetime:  300000
+Accumulated load-unload cycles:  28701
+Elements in grown defect list: 0
+
