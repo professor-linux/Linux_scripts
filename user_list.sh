@@ -10,7 +10,7 @@ display_help() {
 
 display_users() {
     users=$(who | sort | uniq )
-    echo "Name: $users"
+    echo "$users"
 }
 
 while [[ $# -gt 0 ]]; do
