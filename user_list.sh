@@ -19,7 +19,7 @@ while [[ $# -gt 0 ]]; do
         display_help
         exit 0
         ;;
-     -u:--users)
+     -u|--users)
        display_users
        exit 0
        ;;
