@@ -9,7 +9,8 @@ display_help() {
 }
 
 display_users() {
-    users=$(who | sort | uniq )
+    users=$(who | sort | awk '{print $1}' | uniq)
+    echo "User Names| Total Users: $(users | wc -l )"
     echo "$users"
 }
 
